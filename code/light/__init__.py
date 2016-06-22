@@ -1,13 +1,16 @@
 '''
 Keep track of the state of the light entity
 '''
-state = 0
-def getState():
-    return state
+class Light:
+    def __init__(self):
+        self.state = 0
 
-def on():
-    state = 1
+    def getState(self):
+        return self.state
 
-def off():
-    state = 0
+    def on(self):
+        self.state = 1
+
+    def off(self):
+        self.state = 0
 
