@@ -1,15 +1,26 @@
 '''
 Main file
 '''
-import trafficLight
-import jira
-import time
+import time, trafficLight, jira
 
 
 def main():
     # set up the light
-    signal = trafficLight()
+    signal = trafficLight.TrafficLight()
+    # run starting test sequence
+    for i in range(1,4):
+        signal.change('red')
+        time.sleep(i)
+        signal.change('yellow')
+        time.sleep(i)
+        signal.change('green')
+        time.sleep(i)
+
+    signal.red.on()
+    signal.yellow.on()
+    signal.green.on()
     # TODO import connection string
+    
     connection_string = ''
     jira_handle = jira()
     jira_handle.connect(connection_string)
@@ -21,7 +32,7 @@ def main():
         else:
             signal.change('red')
 
-        time.sleep(2)
+        time.sleep(5)
 
 
 if __name__ == '__main__':
