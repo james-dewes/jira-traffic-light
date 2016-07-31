@@ -2,15 +2,18 @@
 Keep track of the state of the light entity
 '''
 class Light:
-    def __init__(self):
-        self.state = 0
+    def __init__(self, state=False):
+        """
 
-    def getState(self):
-        return self.state
+
+        :type state: boolean
+        :type self: object
+        """
+        self.state = state
 
     def on(self):
-        self.state = 1
+        self.state = True
 
     def off(self):
-        self.state = 0
+        self.state = False
 
