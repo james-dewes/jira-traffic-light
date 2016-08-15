@@ -2,8 +2,7 @@
 <body>
   <h1>Jira Traffic Light</h1>
   <p>Make a simple traffic light system to monitor Jira helpdesk project queues.</p>
-  <p>By James Dewes</p>
-  
+
   <h2>Notes</h2>
   <p>This is written for Python 2 and uses the urllib, urlib2 and RPi.</p>
   <p>
