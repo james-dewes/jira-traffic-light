@@ -7,10 +7,10 @@ import light
 class TrafficLight:
     colours = ["red", "yellow", "green"]
 
-    def __init__(self):
-        self.red = light.Light()
-        self.yellow = light.Light()
-        self.green = light.Light()
+    def __init__(self, pins):
+        self.red = light.Light(pins[0])
+        self.yellow = light.Light(pins[1])
+        self.green = light.Light(pins[2])
 
     def __getitem__(self, item):
         try:
@@ -25,3 +25,9 @@ class TrafficLight:
                 self[c].on()
             else:
                 self[c].off()
+
+
+    def cleanup(self):
+        self.red.cleanup()
+        self.yellow.cleanup()
+        self.green.cleanup()
