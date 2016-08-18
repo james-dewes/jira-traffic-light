@@ -29,7 +29,6 @@ def main():
     noise.play()
 
 
-    # TODO import connection string and jql
     conex_file = open('conx.txt')
     url = conex_file.readline()
     auth_string = conex_file.readline()
