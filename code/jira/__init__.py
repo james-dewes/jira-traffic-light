@@ -1,8 +1,7 @@
 '''
 Connect to Jira
 '''
-import json
-from urllib2 import urlopen, Request
+import json, urllib2
 from urllib import quote
 
 class Jira:
@@ -16,14 +15,31 @@ class Jira:
 
     def request(self):
         try:
-            q = Request(self.query_url + self.jql)
-            q.add_header('Authorization', self.authentication_string)
-            page = urlopen(q ).read()
+            q = urllib2.Request(self.query_url + self.jql)
+            q.add_header('Authorization', 'Basic ' + self.authentication_string)
+            page = urllib2.urlopen(q).read()
+        except urllib2.HTTPError, e:
+			print e.code
+			print e.read()
+			self.data["total"] = -1
+        except:
+			self.data["total"] = -2
+				
+        try:
             page = page.decode('utf-8')
+        except:
+			print("not UTF-8")
+			
+        try:
             self.data = json.loads(page)
+        except:
+			print("could not load data, error decoding")
+			self.data["total"] = -2
+			
+        try:
             self.critical_tickets_check()
         except:
-            self.data["total"] = 0
+			print('Error checking for critical')
         
         
     def total_tickets(self):
@@ -34,11 +50,12 @@ class Jira:
            returns True if there are any Critical tickets in the returned filter
         """
         self.critical_ticket = False
-        for ticket in self.data["issues"]:
-            if "priority" in ticket["fields"]:
-                if ticket["fields"]["priority"]["name"] =="Critical":
-                    self.critical_ticket = True
-                    break
+        if "issues" in self.data:
+			for ticket in self.data["issues"]:
+				if "priority" in ticket["fields"] and "name" in ticket["fields"]["priority"] and ticket["fields"]["priority"]["name"] == "Critical":
+					self.critical_ticket = True
+					break
+
 
 
         

@@ -6,7 +6,7 @@ import time, trafficLight, jira, sound
 
 def main():
     # set up the pin numbers should be the out pins on your Pi
-    signal = trafficLight.TrafficLight([18, 15, 14])
+    signal = trafficLight.TrafficLight([18, 15, 17])
     #set up the sound
     noise = sound.sound()
     # run starting test sequence
@@ -29,7 +29,7 @@ def main():
     noise.play()
 
 
-    # TODO import connection string and jql
+    # import connection string and jql
     conex_file = open('conx.txt')
     url = conex_file.readline()
     auth_string = conex_file.readline()
@@ -39,25 +39,34 @@ def main():
     try:
         while True:
             jira_handle.request()
-            if jira_handle.total_tickets() != 0 and jira_handle.total_tickets() < old_total:
+            if jira_handle.total_tickets() >= 0 and jira_handle.total_tickets() < old_total:
                 noise.play()
                 old_total = jira_handle.total_tickets()
             elif jira_handle.total_tickets() > 0:
                 old_total = jira_handle.total_tickets()
-
             
-            if jira_handle.total_tickets() == 0:
+            if jira_handle.total_tickets() == -1:
                 # Connection error
                 signal.change('red')
                 for i in range(0,10):
                     signal.red.on()
                     time.sleep(0.5)
                     signal.red.off()
-                
+            
+            elif jira_handle.total_tickets() == -2:
+                # parse error
+                signal.change('yellow')
+                for i in range(0,10):
+                    signal.yellow.on()
+                    time.sleep(0.5)
+                    signal.yellow.off()    
+                    
             elif jira_handle.total_tickets() < 35 and jira_handle.critical_tickets() == False:
                 signal.change('green')
+                
             elif jira_handle.total_tickets() >= 35 and jira_handle.total_tickets() < 50 and jira_handle.critical_tickets() == False:
                 signal.change('yellow')
+                
             else:
                 signal.change('red')
 
